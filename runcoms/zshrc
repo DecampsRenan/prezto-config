@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 #
 # Executes commands at the start of an interactive session.
 #
@@ -10,4 +17,99 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+# Disable zsh auto correct feature
+unsetopt correct
+
 # Customize to your needs...
+autoload -Uz promptinit
+promptinit
+prompt powerlevel10k
+
+# aliases
+alias ls="ls -p -G"
+alias la="ls -A"
+alias ll="ls -l"
+alias lla="ll -A"
+alias g=git
+
+alias reload-config="source ~/.zshrc"
+alias edit-config="code ~/.zprezto"
+
+# Override ll and lla aliases for a better ls alternative
+# https://the.exa.website/
+whence -p exa >/dev/null
+if [[ $? -eq 0 ]]
+then
+  alias ll="exa -l -g --icons"
+  alias lla="ll -a"
+fi
+
+# Create an alias "share-android-screen" if scrcpy is installed
+whence -p scrcpy >/dev/null
+if [[ $? -eq 0 ]]
+then
+  alias share-android-screen="scrcpy --show-touches --always-on-top"
+fi
+
+# Override rm with a safer version
+whence -p trash >/dev/null
+if [[ $? -eq 0 ]]
+then
+  alias rm="trash"
+fi
+
+# Git alias
+alias gst="git st"
+alias ga="git add ."
+alias gco="git checkout"
+alias gcoo="git checkout -b"
+alias gc="git commit"
+alias gcf="git commit --fixup"
+alias gca="git commit --amend"
+alias gl="git pull --rebase"
+alias gp="git push"
+alias gpf="git push --force-with-lease"
+alias gb="git branch --list"
+alias gbr="git branch --list -r"
+alias gbb="git branch -a --list"
+alias gbd="git branch -d"
+alias gbdd="git branch -D"
+alias glo="git log --oneline"
+alias glog="git log --oneline --graph"
+alias gtmp="git stash"
+alias gpop="git stash apply"
+
+function gupdate() {
+  git fetch origin $1:$1
+}
+
+export PATH="$PATH:$HOME/.local/bin"
+
+# Nodejs
+whence -p fnm >/dev/null
+if [[ $? -eq 0 ]]
+then
+  eval "$(fnm env --use-on-cd)"
+fi
+
+# Yarn globals
+export YARN_GLOBALS=`yarn global bin`
+export PATH="$PATH:$YARN_GLOBALS:~/.config/yarn/link"
+
+# Ruby GEMs
+export GEM_HOME="$HOME/.gem"
+export PATH="$GEM_HOME/bin:$PATH"
+
+# Android tools
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$PATH:$ANDROID_HOME/emulator"
+export PATH="$PATH:$ANDROID_HOME/tools"
+export PATH="$PATH:$ANDROID_HOME/tools/bin"
+export PATH="$PATH:$ANDROID_HOME/platform-tools"
+
+# Brew bins
+export PATH="/usr/local/sbin:$PATH"
+
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

@@ -78,6 +78,7 @@ alias glo="git log --oneline"
 alias glog="git log --oneline --graph"
 alias gtmp="git stash"
 alias gpop="git stash apply"
+alias grs="git reset --soft HEAD~"
 
 function gupdate() {
   git fetch origin $1:$1

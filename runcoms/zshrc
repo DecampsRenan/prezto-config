@@ -119,5 +119,19 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
+# Command to minify video using ffmpeg
+# Given ./path/to/your/video-file.mov as input, it will output ./path/to/your/video-file.min.mov
+# The command will prompt confirmation before erasing an already existing minified file
+# usage: minify ./path/to/your/video-file.mov
+minify() {
+  filename=$(basename -- "$1")
+  filepath=$(dirname -- "$1")
+  extension="${filename##*.}"
+  filename="${filename%.*}"
+
+  # Compress video file and save the compressed version with a .min extension
+  ffmpeg -i $1 -vcodec libx265 -crf 28 "${filepath}/${filename}.min.${extension}" -hide_banner
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

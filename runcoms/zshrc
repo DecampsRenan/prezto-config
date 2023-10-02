@@ -1,4 +1,4 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Enable Powerlevel10k instant prompt. Should stay close to the top of $HOME/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -32,8 +32,8 @@ alias ll="ls -l"
 alias lla="ll -A"
 alias g=git
 
-alias reload-config="source ~/.zshrc"
-alias edit-config="code ~/.zprezto"
+alias reload-config="source $HOME/.zshrc"
+alias edit-config="code $HOME/.zprezto"
 
 # Override ll and lla aliases for a better ls alternative
 # https://the.exa.website/
@@ -64,11 +64,13 @@ alias ga="git add ."
 alias gco="git checkout"
 alias gcoo="git checkout -b"
 alias gc="git commit"
+alias gcff="git commit --no-verify"
 alias gcf="git commit --fixup"
 alias gca="git commit --amend"
 alias gl="git pull --rebase"
 alias gp="git push"
 alias gpf="git push --force-with-lease"
+alias gpff="git push --force-with-lease --no-verify"
 alias gb="git branch --list"
 alias gbr="git branch --list -r"
 alias gbb="git branch -a --list"
@@ -95,7 +97,7 @@ fi
 
 # Yarn globals
 export YARN_GLOBALS=`yarn global bin`
-export PATH="$PATH:$YARN_GLOBALS:~/.config/yarn/link"
+export PATH="$PATH:$YARN_GLOBALS:$HOME/.config/yarn/link"
 
 # Ruby GEMs
 export GEM_HOME="$HOME/.gem"
@@ -133,5 +135,19 @@ minify() {
   ffmpeg -i $1 -vcodec libx265 -crf 28 "${filepath}/${filename}.min.${extension}" -hide_banner
 }
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# To customize prompt, run `p10k configure` or edit "$HOME/.p10k.zsh".
+[[ ! -f "$HOME/.p10k.zsh" ]] || source "$HOME/.p10k.zsh"
+
+# pnpm
+export PNPM_HOME="/Users/renan/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+# bun completions
+[ -s "/Users/renan/.bun/_bun" ] && source "/Users/renan/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
